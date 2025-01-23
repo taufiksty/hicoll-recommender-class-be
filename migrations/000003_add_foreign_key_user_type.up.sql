@@ -1,0 +1,1 @@
+ALTER TABLE users ADD CONSTRAINT fk_user_type FOREIGN KEY (user_type_id) REFERENCES user_types (id);

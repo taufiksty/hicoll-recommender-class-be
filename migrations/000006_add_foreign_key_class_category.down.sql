@@ -1,0 +1,1 @@
+ALTER TABLE classes DROP CONSTRAINT IF EXISTS fk_class_category;

@@ -1,0 +1,1 @@
+ALTER TABLE classes ADD CONSTRAINT fk_class_category FOREIGN KEY (class_category_id) REFERENCES class_categories (id);
