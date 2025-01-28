@@ -13,6 +13,8 @@ type User struct {
 	PhoneNumber  string    `json:"phone_number" gorm:"type:varchar(20);not null"`
 	Gender       string    `json:"gender" gorm:"type:varchar(10);not null"`
 	Birthdate    string    `json:"birthdate" gorm:"type:date;not null"`
+	Description  *string   `json:"description,omitempty" gorm:"type:text"`
+	LinkedinURL  *string   `json:"linkedin_url,omitempty" gorm:"type:varchar(255)"`
 	Image        *string   `json:"image,omitempty" gorm:"type:varchar(255)"`
 	Interests    *string   `json:"interests,omitempty" gorm:"type:varchar(255)"`
 	IsActive     bool      `json:"is_active" gorm:"type:boolean;default:true"`

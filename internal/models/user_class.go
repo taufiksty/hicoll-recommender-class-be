@@ -10,6 +10,7 @@ type UserClass struct {
 	ID        uint      `json:"id" gorm:"primaryKey;autoIncrement"`
 	UserID    uint      `json:"user_id" gorm:"type:int;not null"`
 	ClassID   uint      `json:"class_id" gorm:"type:int;not null"`
+	Rating    uint      `json:"rating" gorm:"type:int"`
 	CreatedAt time.Time `json:"created_at" gorm:"default:CURRENT_TIMESTAMP"`
 	UpdatedAt time.Time `json:"updated_at" gorm:"default:CURRENT_TIMESTAMP"`
 

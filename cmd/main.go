@@ -4,8 +4,8 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/taufiksty/hicoll-recommender-class-be/internal/app/config"
-	"github.com/taufiksty/hicoll-recommender-class-be/internal/app/models"
+	"github.com/taufiksty/hicoll-recommender-class-be/internal/config"
+	"github.com/taufiksty/hicoll-recommender-class-be/internal/models"
 )
 
 func Start() {

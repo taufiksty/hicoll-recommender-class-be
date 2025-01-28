@@ -11,9 +11,9 @@ type Class struct {
 	Name                  string         `json:"name" gorm:"type:varchar(255);not null"`
 	Image                 *string        `json:"image,omitempty" gorm:"type:varchar(255)"`
 	Thumbnail             *string        `json:"thumbnail,omitempty" gorm:"type:varchar(255)"`
-	Description           *string        `json:"description,omitempty" gorm:"type:varchar(255)"`
-	MetaDescription       *string        `json:"meta_description,omitempty" gorm:"type:varchar(255)"`
-	Level                 string         `json:"level" gorm:"type:varchar(10);not null"`
+	Description           *string        `json:"description,omitempty" gorm:"type:text"`
+	MetaDescription       *string        `json:"meta_description,omitempty" gorm:"type:text"`
+	Level                 string         `json:"level" gorm:"type:varchar(100);not null"`
 	ClassCategoryID       uint           `json:"class_category_id" gorm:"type:not null"`
 	ClassCategory         ClassCategory  `gorm:"foreignKey:ClassCategoryID;references:ID"`
 	Tags                  *string        `json:"tags,omitempty" gorm:"type:varchar(255)"`
@@ -30,6 +30,7 @@ type Class struct {
 	ConsultancySchedule   *string        `json:"consultancy_schedule,omitempty" gorm:"type:varchar(255)"`
 	GroupChatLink         *string        `json:"group_chat_link,omitempty" gorm:"type:varchar(255)"`
 	RegistrationCloseDate *string        `json:"registration_close_date,omitempty" gorm:"type:date"`
+	Price                 string         `json:"price" gorm:"type:varchar(255);default:0"`
 	IsDeleted             bool           `json:"is_deleted" gorm:"type:boolean;default:false"`
 	CreatedAt             time.Time      `json:"created_at" gorm:"default:CURRENT_TIMESTAMP"`
 	UpdatedAt             time.Time      `json:"updated_at" gorm:"default:CURRENT_TIMESTAMP"`

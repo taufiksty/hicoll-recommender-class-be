@@ -5,6 +5,8 @@ CREATE TABLE users (
     phone_number VARCHAR(20) NOT NULL,
     gender VARCHAR(10) NOT NULL,
     birthdate DATE NOT NULL,
+    description TEXT,
+    linkedin_url VARCHAR(255),
     image VARCHAR(255),
     interests VARCHAR(255),
     is_active BOOLEAN DEFAULT TRUE,
