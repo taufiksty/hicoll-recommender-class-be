@@ -2,9 +2,7 @@ syntax = "proto3";
 
 package proto;
 
-service RecommendationService {
-  rpc GetRecommendations(RecommendationRequest) returns (RecommendationResponse);
-}
+option go_package = "github.com/taufiksty/hicoll-recommendation-class-be/client";
 
 message RecommendationRequest {
   int32 user_id = 1;
@@ -37,8 +35,13 @@ message Recommendation {
   repeated string tags = 24;
   string thumbnail = 25;
   string updated_at = 26;
+  string collaboration_feed= 27;
 }
 
 message RecommendationResponse {
   repeated Recommendation recommendations = 1;
+}
+
+service RecommendationService {
+  rpc GetRecommendations(RecommendationRequest) returns (RecommendationResponse);
 }

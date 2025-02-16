@@ -10,9 +10,9 @@ type User struct {
 	ID           uint      `json:"id" gorm:"primary_key;autoIncrement"`
 	Fullname     string    `json:"fullname" gorm:"type:varchar(255);not null"`
 	Email        string    `json:"email" gorm:"type:varchar(255);uniqueIndex;not null"`
-	PhoneNumber  string    `json:"phone_number" gorm:"type:varchar(20);not null"`
-	Gender       string    `json:"gender" gorm:"type:varchar(10);not null"`
-	Birthdate    string    `json:"birthdate" gorm:"type:date;not null"`
+	PhoneNumber  string    `json:"phone_number" gorm:"type:varchar(20)"`
+	Gender       string    `json:"gender" gorm:"type:varchar(10)"`
+	Birthdate    string    `json:"birthdate" gorm:"type:date"`
 	Description  *string   `json:"description,omitempty" gorm:"type:text"`
 	LinkedinURL  *string   `json:"linkedin_url,omitempty" gorm:"type:varchar(255)"`
 	Image        *string   `json:"image,omitempty" gorm:"type:varchar(255)"`
