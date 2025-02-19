@@ -11,47 +11,63 @@ import (
 )
 
 func Register(ctx *gin.Context, db *gorm.DB) {
-	var user models.User
-	if err := ctx.ShouldBindJSON(&user); err != nil {
+	var registerInput struct {
+		Fullname string `json:"fullname" binding:"required"`
+		Email    string `json:"email" binding:"required,email"`
+		Password string `json:"password" binding:"required,min=6"`
+	}
+
+	if err := ctx.ShouldBindJSON(&registerInput); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
 	}
 
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(registerInput.Password), bcrypt.DefaultCost)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
 		return
 	}
-	user.Password = string(hashedPassword)
 
-	user.UserTypeID = 3
+	user := models.User{
+		Fullname:     registerInput.Fullname,
+		Email:        registerInput.Email,
+		Password:     string(hashedPassword),
+		Birthdate:    "2000-01-01",
+		UserTypeID:   3,
+		IsFirstLogin: true,
+	}
 
 	if err := db.Create(&user).Error; err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to create user"})
+		return
 	}
 
 	ctx.JSON(http.StatusCreated, gin.H{"message": "User registered successfully"})
 }
 
 func Login(ctx *gin.Context, db *gorm.DB) {
-	var user models.User
-	var input models.User
+	var loginInput struct {
+		Email    string `json:"email" binding:"required,email"`
+		Password string `json:"password" binding:"required"`
+	}
 
-	if err := ctx.ShouldBindJSON(&input); err != nil {
+	var user models.User
+
+	if err := ctx.ShouldBindJSON(&loginInput); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
 	}
 
-	if err := db.Where("email = ?", input.Email).First(&user).Error; err != nil {
+	if err := db.Where("email = ?", loginInput.Email).First(&user).Error; err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginInput.Password)); err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
 
-	token, err := middlewares.GenerateToken(user.Email)
+	token, err := middlewares.GenerateToken(user.ID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
@@ -64,10 +80,14 @@ func Login(ctx *gin.Context, db *gorm.DB) {
 }
 
 func UpdateUser(ctx *gin.Context, db *gorm.DB) {
-	userID := ctx.Param("id")
+	userID, exists := ctx.Get("user_id")
+	if !exists {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "User ID not found in context"})
+		return
+	}
 
 	var updateData struct {
-		Interests *string `json:"interests,omitempty"`
+		Interests []string `json:"interests,omitempty"`
 	}
 
 	if err := ctx.ShouldBindJSON(&updateData); err != nil {

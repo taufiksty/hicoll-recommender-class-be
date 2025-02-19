@@ -3,6 +3,7 @@ package cmd
 import (
 	"log"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/taufiksty/hicoll-recommender-class-be/internal/config"
 	"github.com/taufiksty/hicoll-recommender-class-be/internal/handlers"
@@ -13,6 +14,16 @@ import (
 
 func Start() {
 	router := gin.Default()
+
+	corsConfig := cors.Config{
+		AllowOrigins:     []string{"http://localhost:3001"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}
+
+	router.Use(cors.New(corsConfig))
 
 	db, err := config.SetupDB()
 	if err != nil {
@@ -48,7 +59,7 @@ func setupRoutes(router *gin.Engine, db *gorm.DB) {
 	})
 
 	authRouter := router.Use(middlewares.AuthMiddleware())
-	authRouter.PUT("/api/user/:id", func(ctx *gin.Context) {
+	authRouter.PUT("/api/user", func(ctx *gin.Context) {
 		handlers.UpdateUser(ctx, db)
 	})
 	authRouter.GET("/api/class", func(ctx *gin.Context) {
