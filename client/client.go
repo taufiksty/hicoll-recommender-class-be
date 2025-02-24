@@ -2,7 +2,6 @@ package client
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"google.golang.org/grpc"
@@ -32,9 +31,9 @@ func GetRecommendations(userID int32) ([]*Recommendation, error) {
 	}
 
 	// Log recommendations
-	for _, rec := range response.Recommendations {
-		log.Printf("Recommendation: ID=%d, Name=%s, Score=%f", rec.Id, rec.Name, rec.Score)
-	}
+	// for _, rec := range response.Recommendations {
+	// 	log.Printf("Recommendation: ID=%d, Name=%s, Score=%f", rec.Id, rec.Name, rec.Score)
+	// }
 
 	return response.Recommendations, nil
 }
